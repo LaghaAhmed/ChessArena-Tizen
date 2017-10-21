@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Phaser</title>
+<script type="text/javascript" src="./js/game.js"></script>
+<script type="text/javascript" src="./js/TVKeyValue.js"></script>
+<script type="text/javascript" src="./js/phaser.min.js"></script>
+<style type="text/css">
+body {
+	margin: 0;
+}
+</style>
+</head>
+<body>
+
+	<script type="text/javascript">
+		var game = new Phaser.Game(1920, 1080, Phaser.CANVAS, 'phaser-example',
+				{preload : preload,create : create,update : update});
+		var player;
+		var player2;
+		var platforms;
+		var cursors;
+		var pions;
+		var score = 0;
+		var nbrMove = 0;
+		var levelText;
+		var nbrMoveText;
+		var scoreText;		
+		var bsText;
+		var bestScoreText;
+		var playerNameText;
+		var timeText;
+		var scoreText;
+		var posX = 240;
+		var posY = 160;
+		var tween;
+		var canMove = true;
+		var s = 1; //player scale
+		var x = 1; //pos sur x
+		var y = 1; //pos sur y
+		var move;
+		var sprite;
+		var movement;
+		var timer;
+		var min=0;
+		var sec=0;		
+		var popupWin1;
+		var popupWin2;
+		var popupWin3;
+		var tweenPopUp;
+		var r=false;//last direction is right
+		var l=false;//last direction is left
+		var u=false;//last direction is up
+		var d=false;//last direction is down
+		var popupLose;
+		var nbPion=11;//nombre de pion
+		var bonusFin;
+		function preload() {
+
+			game.load.image('echequie', 'images/echequie2.png');
+			game.load.image('menuTop', 'images/menuTop.png');
+			game.load.image('logo', 'images/logo.png');
+			game.load.image('menuEndTop', 'images/menuEndTopNet.png');
+			game.load.spritesheet('tour', 'images/tour185.png', 110, 185);
+			game.load.image('tourInvis', 'images/tour185Invisible.png', 110,185);
+			game.load.spritesheet('pion', 'images/pion185.png');
+			game.load.image('1win', 'images/1Star.png');
+			game.load.image('2win', 'images/2Star.png');
+			game.load.image('3win', 'images/3Star1080.png');
+			game.load.image('lose', 'images/youLose.png');
+
+		}
+
+		function create() {
+			game.physics.startSystem(Phaser.Physics.ARCADE);
+			//game.physics.arcade.enable(player2);
+			//  A simple background for our game
+			game.add.sprite(0, 0, 'echequie');
+			game.add.sprite(0, 0, 'logo');
+			game.add.sprite(0, 0, 'menuTop');		
+			bonusFin=0;
+			bestScore=sessionStorage.getItem("score4");
+			
+			levelText = game.add.text(40, 66, '4', {fontSize : '62px',fill : '#000'});
+			scoreText = game.add.text(167, 66, '0', {fontSize : '52px',fill : '#000'});
+			nbrMoveText = game.add.text(290, 66, '0', {fontSize : '52px',fill : '#000'});
+			timeText = game.add.text(410, 66,'00:00', {fontSize : '52px',fill : '#000'});
+			//  Finally some stars to collect
+			pions = game.add.group();
+			pions.enableBody = true;
+
+/* 			var pion = pions.create(690, game.world.height - 365, 'pion');//1-3
+			var pion = pions.create(985, game.world.height - 365, 'pion');//1-5
+			var pion = pions.create(704, game.world.height - 590, 'pion');//3-3
+			var pion = pions.create(975, game.world.height - 700, 'pion');//4-5 
+			var pion = pions.create(698, game.world.height - 480, 'pion');//3-2
+			var pion = pions.create(980, game.world.height - 480, 'pion');//4-2
+			var pion = pions.create(973, game.world.height - 795, 'pion');//5-5 
+			var pion = pions.create(1275, game.world.height - 365, 'pion');//7-1
+			var pion = pions.create(980, game.world.height - 480, 'pion');//5-2
+		    var pion = pions.create(450, game.world.height - 698, 'pion');//1-4
+		    var pion = pions.create(710, game.world.height - 696, 'pion');//3-4
+		    //var pion = pions.create(1240, game.world.height - 696, 'pion');//7-4
+		    var pion = pions.create(725, game.world.height - 887, 'pion');//3-6
+		    var pion = pions.create(973, game.world.height - 887, 'pion');//5-6
+		    var pion = pions.create(1219, game.world.height - 887, 'pion');//7-6
+		    var pion = pions.create(970, game.world.height - 1050, 'pion');//5-8
+		    var pion = pions.create(1205, game.world.height - 1050, 'pion');//7-8*/
+		    
+		    var pion = pions.create(839, game.world.height - 365, 'pion');//4-1
+		    var pion = pions.create(1275, game.world.height - 365, 'pion');//7-1 OK
+		    var pion = pions.create(1420, game.world.height - 355, 'pion');//8-1
+			var pion = pions.create(847, game.world.height - 590, 'pion');//4-3
+			
+		    var pion = pions.create(441, game.world.height - 698, 'pion');//1-4 OK
+		    var pion = pions.create(710, game.world.height - 696, 'pion');//3-4 OK
+		    var pion = pions.create(1240, game.world.height - 696, 'pion');//7-4 OK
+		    
+		    var pion = pions.create(1370, game.world.height - 696, 'pion');//8-4 
+		    var pion = pions.create(464, game.world.height - 795, 'pion'); //1-5
+		    var pion = pions.create(845, game.world.height - 795, 'pion'); //4-5		    
+		    var pion = pions.create(1320, game.world.height - 1050, 'pion');//8-8
+
+			bestScoreText = game.add.text(1660, 180,'Best score:');
+			bestScoreText.anchor.set(0.5);
+			bestScoreText.font = 'Arial Black';
+			bestScoreText.fontSize = 70;
+			bestScoreText.fontWeight = 'bold';
+			bestScoreText.fill = '#43251b';
+			bestScoreText.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 0);
+		    
+			bsText = game.add.text(1600, 240,bestScore + '');
+			bsText.anchor.set(0.5);
+			bsText.font = 'Arial Black';
+			bsText.fontSize = 70;
+			bsText.fontWeight = 'bold';
+			bsText.fill = '#43251b';
+			bsText.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 0);
+			
+			playerNameText = game.add.text(300, 180,sessionStorage.getItem("name"));
+			playerNameText.anchor.set(0.5);
+			playerNameText.font = 'Arial Black';
+			playerNameText.fontSize = 70;
+			playerNameText.fontWeight = 'bold';
+			playerNameText.fill = '#ea9c2f';
+			playerNameText.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 0);
+			
+			player = pions.create(390, game.world.height - 360, 'tour');
+			player.name = "player";
+						
+			//game.physics.arcade.enable(player2);
+			player2 = game.add.sprite(390, game.world.height - 360, 'tourInvis');
+			game.physics.arcade.enable(player2);
+		    player2.body.collideWorldBounds = true;
+			
+			timer = game.time.create(false);
+    		timer.loop(1000, updateCounter, this);
+    		timer.start();
+    		pions.sort();
+
+    		popupWin1 = game.add.sprite(game.world.centerX, game.world.centerY, '1win');
+    		popupWin2 = game.add.sprite(game.world.centerX, game.world.centerY, '2win');
+    		popupWin3 = game.add.sprite(game.world.centerX, game.world.centerY, '3win');
+    		popupWin1.anchor.set(0.5);
+    		popupWin1.scale.set(0);
+    		popupWin2.anchor.set(0.5);
+    		popupWin2.scale.set(0);
+    		popupWin3.anchor.set(0.5);
+    		popupWin3.scale.set(0);
+    		popupLose = game.add.sprite(game.world.centerX, game.world.centerY, 'lose');
+    		popupLose.anchor.set(0.5);
+    		popupLose.scale.set(0);
+			cursors = game.input.keyboard.createCursorKeys();
+
+		}
+		function update() {
+			var c = (game.world.centerX - player.x) / 400;
+
+			if (cursors.left.downDuration(2)) {
+				if (x > 1 && canMove) {
+					if(!l)// && (x==2 && y==1 && p1)||(x==4 && y==1 && p1))
+					{
+					nbrMove++;
+					}
+							canMove = false;
+							x--;
+							move = game.add
+									.tween(player)
+									.to(
+											{
+												x : player.x
+														- (139 - (game.world.centerY - player.y) / 22)
+											}, 500, "Linear", true);
+							move2 = game.add
+									.tween(player2)
+									.to(
+											{
+												x : player2.x
+														- (139 - (game.world.centerY - player2.y) / 22)
+											}, 500, "Linear", true);
+							move.onComplete.add(can, this);
+							r=false;
+							l=true;
+							u=false;
+							d=false;
+				}
+			} else if (cursors.right.downDuration(2)) {				
+				if (x < 8 && canMove) {
+					if(!r)// && (x==2 && y==1 && p1)||(x==4 && y==1 && p1))
+					{
+					nbrMove++;
+					}
+					canMove = false;
+					x++;
+					move = game.add
+							.tween(player)
+							.to(
+									{
+										x : player.x
+												+ (139 - (game.world.centerY - player.y) / 22)
+									}, 500, "Linear", true);
+					move2 = game.add
+							.tween(player2)
+							.to(
+									{
+										x : player2.x
+												+ (139 - (game.world.centerY - player2.y) / 22)
+									}, 500, "Linear", true);
+					move.onComplete.add(can, this);
+					
+					r=true;
+					l=false;
+					u=false;
+					d=false;
+				}
+			} else {
+				player.animations.stop();
+				player.frame = 4;
+			}
+			if (cursors.up.downDuration(2)) {
+				if (y < 8 && canMove) {
+					if(!u)
+					{
+					nbrMove++;
+					}
+					canMove = false;
+					y++;
+					move = game.add
+							.tween(player)
+							.to(
+									{
+										y : player.y
+												- (101 - (game.world.centerY - player.y) / 18),
+										x : player.x
+												+ ((game.world.centerX - player.x) / 31)
+									}, 500, "Linear", true);
+					move2 = game.add
+							.tween(player2)
+							.to(
+									{
+										y : player2.y
+												- (101 - (game.world.centerY - player2.y) / 18),
+										x : player2.x
+												+ ((game.world.centerX - player2.x) / 31)
+									}, 500, "Linear", true);
+					s -= 0.03;
+					var scale = game.add.tween(player.scale).to({
+						x : s,
+						y : s
+					}, 500, Phaser.Easing.Linear.None, true, 0);
+					var scale2 = game.add.tween(player2.scale).to({
+						x : s,
+						y : s
+					}, 500, Phaser.Easing.Linear.None, true, 0);
+					move.onComplete.add(can, this);
+					r=false;
+					l=false;
+					u=true;
+					d=false;
+				}
+				
+
+			} else if (cursors.down.downDuration(2)) {
+				if (y > 1 && canMove) {
+					if(!d)
+					{
+					nbrMove++;
+					}
+					canMove = false;
+					y--;
+					move = game.add
+							.tween(player)
+							.to(
+									{
+										y : player.y
+												+ (106 - (game.world.centerY - player.y) / 17),
+										x : player.x
+												- ((game.world.centerX - player.x) / 31),
+										z : y
+									}, 500, "Linear", true);
+					move2 = game.add
+							.tween(player2)
+							.to(
+									{
+										y : player2.y
+												+ (106 - (game.world.centerY - player2.y) / 17),
+										x : player2.x
+												- ((game.world.centerX - player2.x) / 31),
+										z : y
+									}, 500, "Linear", true);
+					s += 0.03;
+					var scale = game.add.tween(player.scale).to({
+						x : s,
+						y : s
+					}, 500, Phaser.Easing.Linear.None, true, 0);
+					move.onComplete.add(can, this);
+					var scale2 = game.add.tween(player2.scale).to({
+						x : s,
+						y : s
+					}, 500, Phaser.Easing.Linear.None, true, 0);
+
+					move.onComplete.add(can, this);
+					r=false;
+					l=false;
+					u=false;
+					d=true;
+				}
+			}
+			game.physics.arcade.overlap(player2, pions, eat, null, this);
+			nbrMoveText.text = nbrMove+'/11';
+			pions.sort('y', Phaser.Group.SORT_ASCENDING);
+		}
+
+		function eat(player2, pion) {
+			if(pion.name!="player"){
+				if (player2.y - pion.y<42 && player2.y-pion.y> - 40) {
+					if(x==3 && y==2){p1=false;}
+					if(x==5 && y==2){p2=false;}
+					if(x==2 && y==4){p3=false;}
+					if(x==5 && y==5){p4=false;}
+					pion.kill();
+					score += 10;
+					nbPion--;
+					r=false;
+					l=false;
+					u=false;
+					d=false;					
+					scoreText.text = '' + score;
+				}
+			}	
+			if(nbPion==0){
+				if(min==0 && sec<30 && nbrMove<12)
+				{tweenPopUp = game.add.tween(popupWin3.scale).to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out, true);}
+				else if(min==0 && sec<50 && nbrMove<13)
+				{tweenPopUp = game.add.tween(popupWin2.scale).to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out, true);}
+				else
+				{tweenPopUp = game.add.tween(popupWin1.scale).to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out, true);}
+				pion.kill();
+				game.add.sprite(0, 0, 'menuEndTop');	
+				timer.stop();
+				if(min<1)bonusFin=60-sec;
+				score=score+sec;
+				scoreText.text=score+"";
+				if(score>bestScore){sessionStorage.setItem("score4",score);}				
+			}							
+		}
+		function can() {
+			canMove = true;
+		}
+		function updateCounter() {
+			sec++;		
+			var zeroMin;
+            var zeroSec;
+            if (sec == 60) { min++; sec = 0; };
+            if (min > 9) zeroMin = ""; else zeroMin = "0";
+            if (sec > 9) zeroSec = ""; else zeroSec = "0";
+            timeText.text = zeroMin + min + ":" + zeroSec + sec;
+		}
+		
+	</script>
+<div id="helpDiv" class="helpDiv"></div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+* {
+    padding: 0;
+	margin: 0;
+	border: 0;
+	position: fixed;
+}
+
+body {
+   width: 1920px;
+	height: 1080px;
+	background-image: url("../images/bg4.png");
+/* TO DO 1 */
+}
+/*div.main_btn:hover{
+box-shadow:0px 0px 20px yellow;
+border:10px;
+}*/
+.divselected1{
+	width: 1920px;
+	height: 1080px;
+	background-image: url("../images/selected1.png");
+}
+
+.divselected2{
+	width: 1920px;
+	height: 1080px;
+	background-image: url("../images/selected2.png");
+}
+
+.divselected3{
+	width: 1920px;
+	height: 1080px;
+	background-image: url("../images/selected3.png");
+}
+
+.divselected4{
+	width: 1920px;
+	height: 1080px;
+	background-image: url("../images/selected4.png");
+}
+
+.divselected5{
+	width: 1920px;
+	height: 1080px;
+	background-image: url("../images/selected5.png");
+
+}
+.main_btn{
+width:350px;
+height:720px;
+position:absolute;
+text-align:center;
+top:710px;
+}
+
+.selected_btn{
+
+}
+
+div.nameDiv{
+display:none;
+background-color: lightblue;
+position: fixed;
+top: 50%;
+left: 50%;
+margin-top: -50px;
+margin-left: -300px;
+width: 580px;
+height:80px;
+color:#ffc608;
+border-radius: 10px;
+padding:20px;
+}
+#nameText{	
+	
+	right:662px;
+    margin:auto;
+	font-size:50pt;
+	focus:true;
+}
+
+div.scoreDiv{
+display:none;
+background-color: lightblue;
+top: 8%;
+left: 50%;
+margin-left: -50px;
+width: 300px;
+height:570px;
+border-radius: 10px;
+padding:20px;
+}
+#h1Score{
+	position: fixed;
+	margin-left: 50px;
+	font-size: 260%;
+    padding:12;
+}
+div.helpDiv{
+display:none;
+background-image: url("../images/help.png");
+position: fixed;
+top: 8%;
+left: 50%;
+margin-left: -50px;
+width: 360px;
+height:560px;
+border-radius: 10px;
+padding:20px;
+}
+
+#level{
+bottom: 50px;
+right: -35px;
+width: 300px;
+text-align:center;
+color:#ffc608;
+z-index:100;
+font-size: 1200%;
+height:170px;
+}
+table {
+	padding: 20px;	
+    border: 0px solid black;
+    font-size: 260%;
+    margin: 0 auto;
+}
+td{
+	padding: 20px;
+	position:relative;
+	border-left: 2px solid black;
+}
+tr{position:relative;}}
+
+#btn_1{
+left:0;
+width:580px;
+}
+
+#btn_2{
+left:450px;
+}
+
+#btn_3{
+left:852px;
+}
+
+#btn_4{
+left:1075px;
+}
+
+#btn_5{
+left:12850px;
+}
+
+#btn_6{
+left:14950px;
+}
